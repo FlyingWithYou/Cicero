@@ -8,26 +8,26 @@
       </view-box>
     </drawer>
     <tabbar>
-      <tabbar-item link="/">
+      <tabbar-item :selected="$route.path == '/'" link="/">
         <span slot="icon" class="iconfont icon-home"></span>
         <span slot="icon-active" class="iconfont icon-home active"></span>
         <span slot="label">喜欢</span>
       </tabbar-item>
-      <tabbar-item show-dot link="/recommend">
+      <tabbar-item :selected="$route.path == '/recommend'" link="/recommend">
         <span slot="icon" class="iconfont icon-planeo"></span>
         <span slot="icon-active" class="iconfont icon-planeo active"></span>
         <span slot="label">推荐</span>
       </tabbar-item>
-      <tabbar-item link="/postArticle">
+      <tabbar-item :selected="$route.path == '/postArticle'" link="/postArticle">
         <span slot="icon" class="iconfont icon-27CIRCLE"></span>
         <span slot="icon-active" class="iconfont icon-27CIRCLE active"></span>
       </tabbar-item>
-      <tabbar-item selected link="/explore">
+      <tabbar-item :selected="$route.path == '/explore'" link="/explore">
         <span slot="icon" class="iconfont icon-discover"></span>
         <span slot="icon-active" class="iconfont icon-discover active"></span>
         <span slot="label">发现</span>
       </tabbar-item>
-      <tabbar-item link="/mine">
+      <tabbar-item :selected="$route.path == '/mine'" link="/mine">
         <span slot="icon" class="iconfont icon-wode1"></span>
         <span slot="icon-active" class="iconfont icon-wode1 active"></span>
         <span slot="label">我的</span>
