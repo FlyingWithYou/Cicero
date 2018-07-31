@@ -1,7 +1,19 @@
 <template>
   <div class="mine">
     <div class="head">
-
+      <img  class="avatar" :src="avatar.url" alt="avatar.name">
+      <div class="author">
+        <span class="author_name">{{avatar.name}}
+          <i class="iconfont icon-bianji" style="font-size:17px;"></i>
+        </span>
+        <span class="pen_name">笔名：{{avatar.pen_name}}</span>
+      </div>
+    </div>
+    <div class="tags">
+      <div class="tag" v-for="(item, index) in tags" :key="index">
+        <span class="name">{{item.name}}</span>
+        <span>{{item.total}}</span>
+      </div>
     </div>
 
     <div class="list" v-for="(item, index) in groupList" :key="index">
@@ -28,6 +40,12 @@ export default {
         {iconName: 'icon-ai66', name: '购买'},
         {iconName: 'icon-flag', name: '举报'},
         {iconName: 'icon-setting', name: '设置'}
+      ],
+      tags: [
+        {name: '关注', total: 199},
+        {name: '粉丝', total: 22},
+        {name: '创作', total: 3},
+        {name: '最近浏览', total: 15}
       ]
     }
   }
@@ -35,16 +53,54 @@ export default {
 </script>
 <style lang="less" scoped>
 .icon-font {
-  width: 24px;
-  height: 24px;
+  font-size: 24px;
 }
 .mine {
   height: 100%;
   background: #f9f9f9;
 }
 .head {
-  height: 100px;
+  padding: 40px 30px 15px 30px;
   background: #fff;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+  .author {
+    font-size: 14px;
+    font-family: pingfang sc;
+    color: #999;
+    display: flex;
+    flex-direction: column;
+    margin-left: 5px;
+    .pen_name {
+      margin-top: 3px;
+      font-size: 12px;
+    }
+  }
+}
+.tags {
+  padding: 10px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  .tag {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-family: pingfang sc;
+    font-size: 14px;
+    color: #959591;
+    .name {
+      font-size: 12px;
+    }
+  }
 }
 .list {
   height: 55px;
