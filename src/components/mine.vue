@@ -23,6 +23,7 @@
       </div>
       <span class="arrow"></span>
     </div>
+
   </div>
 </template>
 <script>
@@ -123,8 +124,8 @@ export default {
   .arrow {
     width: 7px;
     height: 7px;
-    border-top: 2px solid #101010;
-    border-right: 2px solid #101010;
+    border-top: 2px solid #999;
+    border-right: 2px solid #999;
     transform: rotate(45deg);
   }
 }
