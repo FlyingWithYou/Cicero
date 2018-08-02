@@ -22,12 +22,16 @@
         </footer>
       </div>
     </div>
+    <load-more tip="正在加载"></load-more>
   </div>
 </template>
 <script>
+import {LoadMore} from 'vux'
 export default {
   name: 'recommend',
-  components: {},
+  components: {
+    LoadMore
+  },
   data () {
     return {
       tabList: [{name: '推荐', active: true}, {name: '专题', active: false}],
@@ -106,6 +110,7 @@ export default {
       width: 124px;
       height: 100px;
       background: #f6f6f6;
+      display: block;
     }
   }
   footer {

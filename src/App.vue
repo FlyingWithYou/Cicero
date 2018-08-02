@@ -60,16 +60,18 @@ html, body {
   height: 100%;
   width: 100%;
   overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
 }
 #app {
   width: 100%;
   height: 100%;
 }
+a {
+  text-decoration: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
 
 @tabbar-text-active-color: '#559CF9';
-body {
-  background-color: #fff;
-}
 .weui-tabbar {
   position:fixed;
   background:rgb(249, 249, 249);

@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import home from '@/components/home'
-import recommend from '@/components/recommend'
-import postArticle from '@/components/postArticle'
-import explore from '@/components/explore'
-import mine from '@/components/mine'
+import home from '@/components/page/home'
+import recommend from '@/components/page/recommend'
+import postArticle from '@/components/page/postArticle'
+import explore from '@/components/page/explore'
+import mine from '@/components/page/mine'
 
 Vue.use(Router)
 
