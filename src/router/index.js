@@ -5,6 +5,7 @@ import recommend from '@/components/page/recommend'
 import postArticle from '@/components/page/postArticle'
 import explore from '@/components/page/explore'
 import mine from '@/components/page/mine'
+import articleDetail from '@/components/page/articleDetail'
 
 Vue.use(Router)
 
@@ -34,6 +35,11 @@ export default new Router({
       path: '/mine',
       name: 'mine',
       component: mine
+    },
+    {
+      path: '/articleDetail',
+      name: 'articleDetail',
+      component: articleDetail
     }
   ]
 })

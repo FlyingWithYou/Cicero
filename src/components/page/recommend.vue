@@ -1,29 +1,31 @@
 <template>
-  <div class="recommend">
-    <header class="tabHeader">
-      <span @click="changeTab(index)" class="tab" :class="[{active: item.active}]" v-for="(item, index) in tabList" :key="index">{{item.name}}</span>
+  <section class="recommend">
+    <header class="tabs">
+      <div class="tabHeader">
+        <span @click="changeTab(index)" class="tab" :class="[{active: item.active}]" v-for="(item, index) in tabList" :key="index">{{item.name}}</span>
+      </div>
     </header>
     <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
-      <div class="article" v-for="(item, index) in articleList" :key="index">
+      <div class="article" v-for="(item, index) in readingList" :key="index">
         <div class="writing">
-          <div>
+          <div class="wrting_content" :data-id="item.id" @click="goToArticleDetail(item.id)">
             <header class="title">{{item.title}}</header>
-            <article class="content">{{item.content}}</article>
+            <article class="content">{{item.forward}}</article>
           </div>
-          <img class="article_img" :src="item.img_url" alt="" v-if="index % 2 === 0">
+          <div class="article_img"><img :src="item.img_url" alt=""></div>
         </div>
         <footer>
-          <span class="author">{{item.author}}</span>
+          <span class="author">{{item.author.user_name}}</span>
           <div class="total_tag">
-            <span><i class="iconfont icon-like1"></i>{{item.like_total}}</span>
-            <span><i class="iconfont icon-eye"></i>{{item.uv}}</span>
-            <span><i class="iconfont icon-share"></i>{{item.share_total}}</span>
+            <span><i class="iconfont icon-like1"></i>{{item.like_count}}</span>
+            <span><i class="iconfont icon-eye"></i>{{item.has_reading}}</span>
+            <span><i class="iconfont icon-share"></i>{{item.number}}</span>
           </div>
         </footer>
       </div>
     </div>
     <load-more tip="正在加载"></load-more>
-  </div>
+  </section>
 </template>
 <script>
 import {LoadMore} from 'vux'
@@ -34,7 +36,9 @@ export default {
   },
   data () {
     return {
+      lastId: 0,
       tabList: [{name: '推荐', active: true}, {name: '专题', active: false}],
+      readingList: [],
       count: 0,
       writings: {
         title: '我的生命从此多了一个你',
@@ -49,6 +53,10 @@ export default {
     }
   },
   methods: {
+    goToArticleDetail (id) {
+      console.log(id)
+      this.$router.push('/articleDetail:id')
+    },
     changeTab (index) {
       this.tabList = this.tabList.map(item => {
         item.active = false
@@ -56,37 +64,56 @@ export default {
       })
       this.tabList[index].active = true
     },
+    getMoreReading (lastId) {
+      this.$http.get(`http://v3.wufazhuce.com:8000/api/channel/reading/more/${lastId}`).then(res => {
+        this.readingList = this.readingList.concat(res.data.data)
+        this.lastId = this.readingList[this.readingList.length - 1].id
+      })
+    },
     loadMore () {
-      // this.$vux.loading.show({
-      //   text: 'Loading'
-      // })
-      setTimeout(() => {
-        for (var i = 0, j = 10; i < j; i++) {
-          this.articleList.push(this.writings)
-        }
-        // this.$vux.loading.hide()
-      }, 500)
+      this.getMoreReading(this.lastId)
     }
+  },
+  mounted () {
+    // this.getNewReading().then(res => {
+    //   console.log(res)
+    //   this.readingList = res
+    //   this.lastId = res[res.length - 1].id
+    //   console.log(this.lastId)
+    // })
   }
 }
 </script>
 <style lang="less">
-.tabHeader {
-  height: 45px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 10px;
-  .tab {
-    width: 74px;
-    font-size: 16px;
-    color: #101010;
-    padding-bottom: 3px;
-    text-align: center;
-    &.active {
-      color: #DF3030;
-      padding-bottom: 2px;
-      border-bottom: 1px solid #DF3030;
+.recommend {
+  .tabs {
+    position: relative;
+    height: 64px;
+    background: #fff;
+    .tabHeader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 64px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+      z-index: 99;
+      background: #f9f9f9;
+      .tab {
+        width: 74px;
+        font-size: 16px;
+        color: #101010;
+        padding-bottom: 3px;
+        text-align: center;
+        &.active {
+          color: #DF3030;
+          padding-bottom: 2px;
+          border-bottom: 1px solid #DF3030;
+        }
+      }
     }
   }
 }
@@ -100,17 +127,38 @@ export default {
   font-size: 14px;
   .writing {
     display: flex;
-    align-items: center;
+    justify-content: space-between;
     margin-bottom: 10px;
-    .title {
-      font-size: 18px;
-      color: #101010;
+    .wrting_content {
+      flex: 2;
+      display: flex;
+      flex-direction: column;
+      margin-right: 10px;
+      .title {
+        font-size: 18px;
+        color: #101010;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+      }
+      .content {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        overflow: hidden;
+      }
     }
     .article_img {
-      width: 124px;
+      flex: 1;
       height: 100px;
       background: #f6f6f6;
       display: block;
+      img {
+        width: 100%;
+        height: 100px;
+        border-radius: 4px;
+      }
     }
   }
   footer {

@@ -1,20 +1,16 @@
 <template>
   <div class="home">
     <swiper>
-      <swiper-slide v-for="(item,index) in cardList" :key="index">
+      <swiper-slide v-for="(item,index) in toDayList" :key="index">
         <div class="card">
-          <img :src="item.cover_img" :alt="item.author" />
-          <p class="title">{{item.title}}</p>
-          <p class="author">{{item.author}}</p>
+          <img :src="item.img_url" :alt="item.author" />
+          <p class="title">{{item.forward}}</p>
+          <p class="author">
+            <span>{{item.author.user_name?item.author.user_name: '匿名作者'}}</span>
+          </p>
         </div>
       </swiper-slide>
     </swiper>
-    <!-- <weuiDialog ref="weuiDialog" @confirm="confirm"></weuiDialog> -->
-    <!-- <customAlert title="支付成功" ref="customAlert">
-      <template slot="content">
-        <p>成功打赏王二爷10CCB</p>
-      </template>
-    </customAlert> -->
   </div>
 </template>
 
@@ -23,6 +19,7 @@ import 'swiper/dist/css/swiper.css'
 import weuiDialog from '@/components/common/weuiDialog'
 import customAlert from '@/components/common/customAlert'
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
+
 export default {
   name: 'home',
   components: {
@@ -33,6 +30,7 @@ export default {
   },
   data () {
     return {
+      toDayList: [],
       scrollX: true,
       cardList: [
         {
@@ -51,15 +49,49 @@ export default {
     }
   },
   methods: {
-    showModal () {
-      this.$refs.weuiDialog.show()
-    },
-    showAlert () {
+    showDialog () {
       this.$refs.customAlert.show()
     },
-    confirm (e) {
-      console.log(e)
+    showAlert () {
+      let that = this
+      this.$vux.confirm.show({
+        title: '支付成功',
+        content: `<p>成功打赏王二爷<span style="color:#E51C23;">10CCB</span></p>`,
+        showCancelButton: false,
+        onCancel () {
+          console.log(that)
+        },
+        onConfirm () {
+          console.log('yes')
+        }
+      })
+    },
+    getArticleIds () {
+      return new Promise((resolve, reject) => {
+        this.$http.get(`http://v3.wufazhuce.com:8000/api/onelist/idlist`).then(res => {
+          let todayId = res.data.data[0]
+          resolve(todayId)
+        }, err => reject(err))
+      })
+    },
+    getTodayArticle (id) {
+      return new Promise((resolve, reject) => {
+        this.$http.get(`http://v3.wufazhuce.com:8000/api/onelist/${id}/0`).then(res => {
+          resolve(res.data.data.content_list)
+        }, err => reject(err))
+      })
+    },
+    async getOneArtile () {
+      this.$vux.loading.show({text: 'Loading'})
+      let todayId = await this.getArticleIds()
+      let toDayData = await this.getTodayArticle(todayId)
+      this.toDayList = toDayData
+      this.$vux.loading.hide()
+      console.log(this.toDayList)
     }
+  },
+  mounted () {
+    this.getOneArtile()
   }
 }
 </script>
@@ -80,9 +112,10 @@ export default {
   top: 74px;
   height: 498px;
   border-radius: 4px;
-  text-align: center;
-  box-shadow: 1px 0px 2px 2px rgba(170, 170, 170, 1);
-  border: 1px solid rgba(255, 255, 255, 0);
+  box-shadow: 2px 2px 5px 0 rgba(170, 170, 170, 1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   img {
     height: 234px;
     width: 100%;
@@ -90,15 +123,20 @@ export default {
     border-top-right-radius: 4px;
   }
   .title {
-    margin-top: 100px;
     font-size: 16px;
     color: #101010;
-    font-weight: 500;
+    font-weight: 400;
+    padding: 0 20px;
   }
   .author {
-    margin-top: 90px;
-    text-align: right;
-    padding: 0 20px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 20px;
+    color: #333;
+    font-weight: 300;
+    display: flex;
+    font-size: 14px;
+    justify-content: flex-end;
   }
 }
 </style>

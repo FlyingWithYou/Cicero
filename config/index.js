@@ -10,7 +10,15 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+      '/oneApi': {
+        target: 'http://v3.wufazhuce.com:8000',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/oneApi': '/oneApi'
+        }
+      }
+    },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST

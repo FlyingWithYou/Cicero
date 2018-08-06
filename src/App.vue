@@ -56,6 +56,9 @@ export default {
 
 <style lang="less">
 @import '~vux/src/styles/reset.less';
+.weui-dialog__btn_primary {
+  color: #333;
+}
 html, body {
   height: 100%;
   width: 100%;
