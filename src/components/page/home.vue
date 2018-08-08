@@ -32,20 +32,7 @@ export default {
     return {
       toDayList: [],
       scrollX: true,
-      cardList: [
-        {
-          cover_img: 'http://image.wufazhuce.com/FjcHfsbi7xfkurxmZMNqgQzyEgm6',
-          title: '我的生命从此多了一个你',
-          author: '王二爷'
-        },
-        {
-          cover_img: 'http://image.wufazhuce.com/FtNJ5eJxA_5AQMmfKsV14EtRWazv',
-          title: '十五岁的夏天错过了什么',
-          author: '安妮'
-        }
-      ],
-      show_modal: false,
-      msg: 'Welcome to Your Vue.js App'
+      show_modal: false
     }
   },
   methods: {
@@ -87,7 +74,6 @@ export default {
       let toDayData = await this.getTodayArticle(todayId)
       this.toDayList = toDayData
       this.$vux.loading.hide()
-      console.log(this.toDayList)
     }
   },
   mounted () {
@@ -112,10 +98,12 @@ export default {
   top: 74px;
   height: 498px;
   border-radius: 4px;
-  box-shadow: 2px 2px 5px 0 rgba(170, 170, 170, 1);
+  // box-shadow: 2px 2px 5px 0 rgba(170, 170, 170, 1);
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  transition: box-shadow .25s;
   img {
     height: 234px;
     width: 100%;
@@ -138,5 +126,8 @@ export default {
     font-size: 14px;
     justify-content: flex-end;
   }
+}
+.card:hover {
+  box-shadow: 0 8px 17px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
 }
 </style>

@@ -1,11 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import home from '@/components/page/home'
-import recommend from '@/components/page/recommend'
-import postArticle from '@/components/page/postArticle'
-import explore from '@/components/page/explore'
-import mine from '@/components/page/mine'
-import articleDetail from '@/components/page/articleDetail'
+const home = () => import('@/components/page/home')
+const recommend = () => import('@/components/page/recommend')
+const postArticle = () => import('@/components/page/postArticle')
+const explore = () => import('@/components/page/explore')
+const mine = () => import('@/components/page/mine')
+const articleDetail = () => import('@/components/page/articleDetail')
 
 Vue.use(Router)
 

@@ -8,9 +8,9 @@
     <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
       <div class="article" v-for="(item, index) in readingList" :key="index">
         <div class="writing">
-          <div class="wrting_content" :data-id="item.id" @click="goToArticleDetail(item.id)">
-            <header class="title">{{item.title}}</header>
-            <article class="content">{{item.forward}}</article>
+          <div class="writing_content" :data-id="item.id" @click="goToArticleDetail(item.content_id, item.img_url)">
+            <div class="title">{{item.title}}</div>
+            <div class="content">{{item.forward}}</div>
           </div>
           <div class="article_img"><img :src="item.img_url" alt=""></div>
         </div>
@@ -36,26 +36,18 @@ export default {
   },
   data () {
     return {
+      scroll: '',
       lastId: 0,
       tabList: [{name: '推荐', active: true}, {name: '专题', active: false}],
       readingList: [],
       count: 0,
-      writings: {
-        title: '我的生命从此多了一个你',
-        content: '如果你无法简洁表达你的想法，那说明你还不够了解它',
-        author: '阿妮',
-        like_total: 90,
-        img_url: 'http://image.wufazhuce.com/FjcHfsbi7xfkurxmZMNqgQzyEgm6',
-        uv: 100,
-        share_total: 100
-      },
       articleList: []
     }
   },
   methods: {
-    goToArticleDetail (id) {
-      console.log(id)
-      this.$router.push('/articleDetail:id')
+    goToArticleDetail (articleId, imgUrl) {
+      this.$store.dispatch('setPostImg', {post_img: imgUrl})
+      this.$router.push(`/articleDetail?articleId=${articleId}`)
     },
     changeTab (index) {
       this.tabList = this.tabList.map(item => {
@@ -99,7 +91,6 @@ export default {
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 10px;
       z-index: 99;
       background: #f9f9f9;
       .tab {
@@ -119,21 +110,19 @@ export default {
 }
 .article {
   width: 90%;
-  margin: 0 auto 14px;
+  margin: 14px auto 0;
   border: 1px solid #F7F3F3;
   box-sizing: border-box;
-  padding: 14px 5px 2px 13px;
+  padding: 10px;
   color: #7B7878;
   font-size: 14px;
   .writing {
     display: flex;
-    justify-content: space-between;
     margin-bottom: 10px;
-    .wrting_content {
+    .writing_content {
       flex: 2;
-      display: flex;
-      flex-direction: column;
       margin-right: 10px;
+      display: block;
       .title {
         font-size: 18px;
         color: #101010;
@@ -155,8 +144,9 @@ export default {
       background: #f6f6f6;
       display: block;
       img {
+        height: 100%;
         width: 100%;
-        height: 100px;
+        max-width: none;
         border-radius: 4px;
       }
     }

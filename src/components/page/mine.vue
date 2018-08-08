@@ -32,7 +32,7 @@ export default {
   data () {
     return {
       avatar: {
-        url: 'https://avatars1.githubusercontent.com/u/23456250?s=460&v=4',
+        url: 'http://image.wufazhuce.com/FpKk2mb_wawSFx-qMyvollJW4PdX',
         name: '王二爷',
         pen_name: '安妮宝贝'
       },
@@ -77,7 +77,7 @@ export default {
     color: #999;
     display: flex;
     flex-direction: column;
-    margin-left: 5px;
+    margin-left: 20px;
     .pen_name {
       margin-top: 3px;
       font-size: 12px;

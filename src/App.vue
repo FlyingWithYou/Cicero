@@ -1,13 +1,11 @@
 <template>
   <div id="app">
-    <drawer>
-      <view-box>
-        <keep-alive>
-          <router-view></router-view>
-        </keep-alive>
-      </view-box>
-    </drawer>
-    <tabbar>
+    <view-box ref="viewBox">
+      <keep-alive :include="['home', 'recommend', 'postArticle', 'explore', 'mine']">
+        <router-view></router-view>
+      </keep-alive>
+    </view-box>
+    <tabbar v-if="isTabBar">
       <tabbar-item :selected="$route.path == '/'" link="/">
         <span slot="icon" class="iconfont icon-home"></span>
         <span slot="icon-active" class="iconfont icon-home active"></span>
@@ -23,8 +21,8 @@
         <span slot="icon-active" class="iconfont icon-27CIRCLE active"></span>
       </tabbar-item>
       <tabbar-item :selected="$route.path == '/explore'" link="/explore">
-        <span slot="icon" class="iconfont icon-discover"></span>
-        <span slot="icon-active" class="iconfont icon-discover active"></span>
+        <span slot="icon" class="iconfont icon-theme"></span>
+        <span slot="icon-active" class="iconfont icon-theme active"></span>
         <span slot="label">发现</span>
       </tabbar-item>
       <tabbar-item :selected="$route.path == '/mine'" link="/mine">
@@ -38,6 +36,7 @@
 
 <script>
 import { Tabbar, TabbarItem, Drawer, ViewBox } from 'vux'
+import {mapActions, mapState} from 'vuex'
 export default {
   name: 'app',
   components: {
@@ -47,8 +46,35 @@ export default {
     ViewBox
   },
   methods: {
+    ...mapActions([
+      'setPosition'
+    ]),
     tabBarChange (e) {
       console.log(e)
+    }
+  },
+  computed: {
+    ...mapState({
+      scrollTop: state => state.scrTop
+    }),
+    isTabBar () {
+      return this.$route.path === '/' || this.$route.path === '/recommend' || this.$route.path === '/explore' || this.$route.path === '/mine'
+    }
+  },
+  watch: {
+    $route (to, from) {
+      // let scrBody = this.$refs.viewBox.getScrollBody()
+      let scrTop = this.$refs.viewBox.getScrollTop()
+      if (to.name === 'articleDetail' && from.name === 'recommend') {
+        // console.warn('从列表到具体文章' + scrTop)
+        this.setPosition({scrTop})
+      }
+      if (to.name === 'recommend' && from.name === 'articleDetail') {
+        // console.warn('从文章到具体列表' + this.scrollTop)
+        setTimeout(() => {
+          this.$refs.viewBox.scrollTo(this.scrollTop)
+        }, 0)
+      }
     }
   }
 }
@@ -78,18 +104,18 @@ a {
 .weui-tabbar {
   position:fixed;
   background:rgb(249, 249, 249);
-}
-.iconfont {
-  font-size: 24px;
-  line-height: 27px;
-  color: #939393;
-}
-.icon-27CIRCLE:before {
-  content: "\E648";
-  font-size: 30px;
-  line-height: 40px;
-}
-.iconfont.active {
-  color: #559CF9;
+  .iconfont {
+    font-size: 24px;
+    line-height: 27px;
+    color: #939393;
+  }
+  .icon-27CIRCLE:before {
+    content: "\E648";
+    font-size: 30px;
+    line-height: 40px;
+  }
+  .iconfont.active {
+    color: #559CF9;
+  }
 }
 </style>
