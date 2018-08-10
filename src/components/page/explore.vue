@@ -6,15 +6,16 @@
         <span>{{item.name}}</span>
       </div>
     </header>
+    <p>{{count}}</p>
   </section>
 </template>
 <script>
 export default {
   name: 'explore',
   components: {},
-  mounted () {},
   data () {
     return {
+      count: 0,
       category: [
         {name: '举报', iconName: 'icon-icon_jubao-mian'},
         {name: '专题', iconName: 'icon-book'},
@@ -24,7 +25,15 @@ export default {
     }
   },
   methods: {
-
+    addCount () {
+      this.count = new Date().toLocaleString()
+      setInterval(() => {
+        this.count = new Date().toLocaleString()
+      }, 1000)
+    }
+  },
+  mounted () {
+    this.addCount()
   }
 }
 </script>
@@ -39,7 +48,7 @@ export default {
     justify-content: space-around;
     margin-left: -5px;
     margin-right: -5px;
-    border-bottom: 1px solid #eee;
+    box-shadow: 0 1px 3px rgba(26,26,26,.1);
     .item {
       display: flex;
       flex-direction: column;
